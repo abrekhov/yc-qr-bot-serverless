@@ -1,0 +1,22 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  version: 1.0.0
+  # servers:
+  # - url: 
+paths:
+  /:
+    get:
+      x-yc-apigateway-integration:
+        type: dummy
+        content:
+          '*': '{"msg":"Hello, World! This is gateway."}'
+        http_code: 200
+        http_headers:
+          Content-Type: application/json
+    post:
+      x-yc-apigateway-integration:
+        type: serverless_containers
+        container_id: bbagjh1omg0ircd69126
+        service_account_id: ajejk6cp1td3kor24p26
+
