@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"os"
+	"yc-qr-bot/pkg/agent"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/joho/godotenv"
@@ -23,8 +24,8 @@ func main() {
 	// bot.ListenForWebhook(":8081")
 	whInfo, _ := bot.GetWebhookInfo()
 	log.Printf("whInfo: %#v\n", whInfo)
-	// ga := agent.New(bot)
+	a := agent.New(bot)
 	e := echo.New()
-	// e.POST("/", ga.HandleUpdate)
+	e.POST("/", a.HandleUpdate)
 	e.Start(":" + os.Getenv("PORT"))
 }
