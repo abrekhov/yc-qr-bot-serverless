@@ -2,7 +2,6 @@ package agent
 
 import (
 	"bytes"
-	"fmt"
 	"image"
 	"log"
 	"net/http"
@@ -12,7 +11,8 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 	"github.com/labstack/echo/v4"
-	"github.com/liyue201/goqr"
+	"github.com/makiuchi-d/gozxing"
+	qrcod "github.com/makiuchi-d/gozxing/qrcode"
 	"github.com/skip2/go-qrcode"
 )
 
@@ -74,15 +74,13 @@ func (a *Agent) DecodeContent(update tgbotapi.Update) error {
 		log.Print(err)
 		return err
 	}
-	qrCodes, err := goqr.Recognize(img)
-	if err != nil {
-		log.Print(err)
-		return err
-	}
+
+	// prepare BinaryBitmap
+	bmp, _ := gozxing.NewBinaryBitmapFromImage(img)
+	qrReader := qrcod.NewQRCodeReader()
+	result, _ := qrReader.Decode(bmp, nil)
 	var finalMessage string
-	for _, qrCode := range qrCodes {
-		finalMessage += fmt.Sprintf("%s\n", qrCode.Payload)
-	}
+	finalMessage = result.String()
 	msg := tgbotapi.NewMessage(update.Message.From.ID, finalMessage)
 	msg.ReplyToMessageID = update.Message.MessageID
 	a.Bot.Send(msg)
