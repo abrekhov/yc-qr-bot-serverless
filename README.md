@@ -2,7 +2,13 @@
 
 <https://t.me/qr_it_bot>
 
-Bot for qr encrypting/decrypting any content.
+Bot for qr encoding/decoding any content.
+
+## Prerequires
+
+- YC CLI
+- golang
+- docker desktop
 
 ## Quickstart
 
