@@ -6,7 +6,8 @@ Bot for qr encoding/decoding any content.
 
 ## Prerequires
 
-- YC CLI
+- [YC CLI](https://cloud.yandex.com/en-ru/docs/cli/operations/install-cli)
+- Make
 - golang
 - docker desktop
 
