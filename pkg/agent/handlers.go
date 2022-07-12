@@ -17,9 +17,12 @@ import (
 )
 
 func (a *Agent) HandleUpdate(c echo.Context) error {
+	log.Printf("c.Request().RequestURI: %v\n", c.Request().RequestURI)
+	log.Printf("c.Request().Method: %v\n", c.Request().Method)
 	var update tgbotapi.Update
 	if err := c.Bind(&update); err != nil {
-		panic(err)
+		log.Print("Cannot bind update", err)
+		return c.JSON(204, nil)
 	}
 
 	if update.Message != nil {
@@ -76,11 +79,18 @@ func (a *Agent) DecodeContent(update tgbotapi.Update) error {
 	}
 
 	// prepare BinaryBitmap
-	bmp, _ := gozxing.NewBinaryBitmapFromImage(img)
+	bmp, err := gozxing.NewBinaryBitmapFromImage(img)
+	if err != nil {
+		log.Print(err)
+		return err
+	}
 	qrReader := qrcod.NewQRCodeReader()
-	result, _ := qrReader.Decode(bmp, nil)
-	var finalMessage string
-	finalMessage = result.String()
+	result, err := qrReader.Decode(bmp, nil)
+	if err != nil {
+		log.Print(err)
+		return err
+	}
+	finalMessage := result.String()
 	msg := tgbotapi.NewMessage(update.Message.From.ID, finalMessage)
 	msg.ReplyToMessageID = update.Message.MessageID
 	a.Bot.Send(msg)
