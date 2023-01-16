@@ -21,7 +21,6 @@ func main() {
 		panic(err)
 	}
 
-	// bot.ListenForWebhook(":8081")
 	whInfo, _ := bot.GetWebhookInfo()
 	log.Printf("whInfo: %#v\n", whInfo)
 	a := agent.New(bot)
